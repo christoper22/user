@@ -26,6 +26,7 @@ user.init(
   {
     sequelize: connection,
     timestamp: true,
+    underscored: true,
     paranoid: true,
     freezeTableName: true,
     tableName: 'user',
