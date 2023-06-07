@@ -4,10 +4,12 @@ const {
   getAllUser,
   createUser,
   deleteUser,
+  updateUser,
+  receiveMessage,
 } = require('../controller/user');
 var router = express.Router();
 
-/* GET users listing. */
+// get all user
 router.get('/', async function (req, res, next) {
   try {
     const data = await getAllUser();
@@ -18,6 +20,8 @@ router.get('/', async function (req, res, next) {
     next(error);
   }
 });
+
+// get user
 router.get('/:id', async function (req, res, next) {
   try {
     const { id } = req.params;
@@ -29,6 +33,8 @@ router.get('/:id', async function (req, res, next) {
     next(error);
   }
 });
+
+// create user
 router.post('/', async function (req, res, next) {
   try {
     const bodies = req.body;
@@ -45,6 +51,7 @@ router.post('/', async function (req, res, next) {
   }
 });
 
+// delete user
 router.delete('/:id', async function (req, res, next) {
   try {
     const { id } = req.params;
@@ -59,6 +66,8 @@ router.delete('/:id', async function (req, res, next) {
     next(error);
   }
 });
+
+// update user
 router.put('/:id', async function (req, res, next) {
   try {
     const { id } = req.params;
@@ -70,6 +79,18 @@ router.put('/:id', async function (req, res, next) {
       message: 'success update user',
       data,
     });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+router.post('/message', async function (req, res, next) {
+  try {
+    const bodies = req.body;
+    const data = receiveMessage(bodies);
+    console.log(data);
+    res.send(data);
   } catch (error) {
     console.log(error);
     next(error);
