@@ -8,11 +8,46 @@ var {
   reverseArray,
   minmax,
 } = require('../controller/star');
+const {
+  importRestourant,
+  getAllRestourant,
+  elasticSearch,
+} = require('../controller/restourant');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'Express' });
 });
+
+router.get('/get-resto', async function (req, res, next) {
+  try {
+    const data = await importRestourant();
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
+router.get('/get-all-resto', async function (req, res, next) {
+  try {
+    const data = await getAllRestourant(req);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+router.get('/elastic', async function (req, res, next) {
+  try {
+    const data = await elasticSearch();
+    res.status(200).json({ data: 'success' });
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
+
 router.get('/star', function (req, res, next) {
   const data = printstar();
   console.log(data.stringA);
