@@ -1,2 +1,5 @@
 node_modules
 .env
+certificate-chain.crt
+certificate.crt
+private.key

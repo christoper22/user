@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cron = require('node-cron');
+const https = require('https');
+const fs = require('fs');
 
 var indexRouter = require('./routes/index');
 const { userBirthday } = require('./controller/user');
@@ -49,6 +51,18 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// const options = {
+//   key: fs.readFileSync('private.key'),
+//   cert: fs.readFileSync('certificate.crt'),
+//   ca: fs.readFileSync('certificate-chain.crt'),
+// };
+// const server = https.createServer(options, app);
+
+// // Start the server
+// server.listen(443, () => {
+//   console.log('Server is running on port 443');
+// });
 
 app.listen(8080, () => {
   console.log(`Server listening in port ${8080}`);

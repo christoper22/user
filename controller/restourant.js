@@ -3,8 +3,8 @@ const fs = require('fs');
 const { Op } = require('sequelize');
 const readline = require('readline');
 const JSONStream = require('JSONStream');
+const https = require('https');
 const { Client } = require('@elastic/elasticsearch');
-const client = new Client({ node: 'https://localhost:9200' });
 
 exports.importRestourant = async () => {
   // const data = fs.readFileSync('./restaurants.json');
@@ -88,27 +88,25 @@ exports.getAllRestourant = async (req) => {
 
 exports.elasticSearch = async (req) => {
   try {
-    // async function checkClusterHealth() {
-    //   try {
-    //     const response = client.cluster.health();
-    //     console.log('Cluster health:', response.body);
-    //   } catch (error) {
-    //     console.error('Error checking cluster health:', error);
-    //   }
-    // }
+    const client = new Client({
+      node: 'http://localhost:9200',
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
 
-    // await checkClusterHealth();
-    async function connectWithRetry() {
-      try {
-        await client.ping();
-        console.log('Connected to Elasticsearch');
-      } catch (error) {
-        console.error('Error connecting to Elasticsearch:', error.message);
-        console.log('Retrying connection in 5 seconds...');
-        setTimeout(connectWithRetry, 5000);
-      }
-    }
-    await connectWithRetry();
+    const { body } = await client.index({
+      index: 'myindex',
+      body: {
+        title: 'Sample Document',
+        content: 'This is a sample document for Elasticsearch.',
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    console.log(body);
   } catch (error) {
     console.log(error);
   }
