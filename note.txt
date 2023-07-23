@@ -1,0 +1,38 @@
+  //stream data read import json if data is to big
+  const filePath = './restaurants.json';
+
+  const stream = fs.createReadStream(filePath, { encoding: 'utf8' });
+  const parser = JSONStream.parse('*');
+
+  stream.pipe(parser);
+
+  parser.on('data', async (object) => {
+    // Process each object from the JSON file here
+    console.log(object);
+    const functionInput = async (data) => {
+      const dataRestourant = await restourant.create({
+        name: data.name,
+        location: data.location,
+        balance: data.balance,
+      });
+      await Promise.all(
+        data.menu.map(async (dataMenu) => {
+          const dataMenuRestourant = await menu.create({
+            id_restourant: dataRestourant.id,
+            name: dataMenu.name,
+            price: parseFloat(dataMenu.price),
+          });
+        })
+      );
+    };
+    await functionInput(object);
+  });
+
+  parser.on('end', () => {
+    // File reading has finished
+  });
+
+  parser.on('error', (error) => {
+    // Handle any error that occurs during parsing
+    console.error(error);
+  });

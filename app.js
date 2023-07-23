@@ -8,7 +8,6 @@ const https = require('https');
 const fs = require('fs');
 
 var indexRouter = require('./routes/index');
-const { userBirthday } = require('./controller/user');
 
 var app = express();
 
@@ -23,18 +22,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-
-cron.schedule(
-  '* 01 * * *',
-  // '*/2 * * * *',
-  async () => {
-    await userBirthday();
-  },
-  {
-    scheduled: true,
-    timezone: 'Asia/Jakarta',
-  }
-);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -51,18 +38,6 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-// const options = {
-//   key: fs.readFileSync('private.key'),
-//   cert: fs.readFileSync('certificate.crt'),
-//   ca: fs.readFileSync('certificate-chain.crt'),
-// };
-// const server = https.createServer(options, app);
-
-// // Start the server
-// server.listen(443, () => {
-//   console.log('Server is running on port 443');
-// });
 
 app.listen(8080, () => {
   console.log(`Server listening in port ${8080}`);

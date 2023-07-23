@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const connection = require('./sequelize');
 
-class user extends Sequelize.Model {}
-user.init(
+class User extends Sequelize.Model {}
+User.init(
   {
     id: {
       type: Sequelize.DataTypes.BIGINT,
@@ -10,16 +10,13 @@ user.init(
       primaryKey: true,
       unique: true,
     },
-    first_name: {
+    user_name: {
       type: Sequelize.DataTypes.STRING,
     },
-    last_name: {
+    name: {
       type: Sequelize.DataTypes.STRING,
     },
-    birth_date: {
-      type: Sequelize.DataTypes.DATEONLY,
-    },
-    location: {
+    password: {
       type: Sequelize.DataTypes.STRING,
     },
   },
@@ -33,4 +30,4 @@ user.init(
   }
 );
 
-module.exports = user;
+module.exports = User;
